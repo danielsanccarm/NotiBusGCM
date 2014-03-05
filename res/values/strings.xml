@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NotiBus</string>
+    <string name="action_settings">Settings</string>
+    <string name="gcm_registered">GCM: Dispositivo registrado satisfactoriamente!</string>
+    <string name="gcm_unregistered">GCM: Eliminación del registro del dispositivo satisfactorio!</string>
+    <string name="gcm_message">GCM: Tienes mensajes!</string>
+    <string name="gcm_error">GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">GCM: error recuperable (%1$s).</string>
+    <string name="gcm_deleted">GCM: Servidor elimino %1$d mensajes pendientes!</string>
+    <string name="server_registering">Intentando (intento %1$d/%2$d)para registrar en el Zoga Server.</string>
+    <string name="server_registered">Zoga Server: Dispositivo agregado satisfactoriamente!</string>
+    <string name="server_unregistered">Zoga Server: Dispositivo eliminado satisfactoriamente!</string>
+    <string name="server_register_error">NO se pudo registrar el dispositivo despues de %1$d intentos.</string>
+    <string name="server_unregister_error">NO se pudo eliminar el dispositivo del Zoga server(%1$s).</string>
+    <string name="options_register">Registrado</string>
+    <string name="options_unregister">SIn registrar</string>
+    <string name="options_clear">Limpiar</string>
+    <string name="options_exit">Salir</string>
+    <string name="tvNombre">Nombre</string>
+    <string name="tvEmail">Email</string>
+    <string name="btRegistrar">Registrar</string>
+    <string name="hintNombre">Nombre(s) Apellidos</string>
+    <string name="hintEmail">algo@ejemplo.com</string>
+    <string name="Parada1SanLazaroNativitas">Metro San Lazaro - Bosque de Nativitas por Cafetales</string>
+    <string name="Parada2SanLazaroNativitas">Bosque de Nativitas por Cafetales - Metro San Lazaro </string>
+    <string name="Bienvenida">Bienvenido</string>
+    <string name="TituloDescargas">Seleccionar las rutas a descargar</string>
+    <string name="TextoBotonDescargas">Descargar Seleccionados</string>
+    <string name="Prueba">Prueba</string>
+    <!-- Parte Visual -->
+    <dimen name="tamanoletra">20sp</dimen>
+    <dimen name="tamanoletra2">13sp</dimen>
+
+    <color name="colorbtRegistrar">#DDDDDD</color>
+    <color name="letraAzul1">#003366</color>
+    <color name="letraAzul2">#000033</color>
+    <color name="grisClaro">#EEEEEE</color>
+    <color name="grisObscuro">#888888</color>
+    <color name="letraAzul3">#000022</color>
+
+    <string name="title_activity_principal">PrincipalActivity</string>
+    <string name="title_activity_lista_descarga">ListaDescarga</string>
+
+</resources>

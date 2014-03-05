@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    android:padding="6dip"
+    android:background="@color/grisClaro"
+    >
+       	<CheckBox
+        android:id="@+id/cbCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="10dp" 
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="CheckBox"
+        android:textSize="@dimen/tamanoletra2"
+        android:textColor="@color/letraAzul2"
+    />
+    
+<!--     <TextView -->
+<!--         android:id="@+id/tvCode" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--          android:layout_alignBaseline="@+id/cbCheck" -->
+<!--         android:layout_alignBottom="@+id/cbCheck" -->
+<!--         android:layout_toLeftOf="@+id/cbCheck" -->
+<!--         android:text="UNOdosTres" -->
+<!--         android:textSize="@dimen/tamanoletra2" -->
+<!--         android:textColor="@color/letraAzul2" -->
+<!--     /> -->
+
+
+</RelativeLayout>

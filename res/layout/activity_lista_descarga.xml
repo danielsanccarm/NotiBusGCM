@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@color/grisClaro"
+    android:gravity="center"
+    >
+   
+	<TextView
+	    android:id="@+id/tvTituloDescargaParadas"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/TituloDescargas"
+	    android:gravity="center"
+	    android:textSize="@dimen/tamanoletra"
+	    android:textColor="@color/letraAzul1"
+    /> 
+    <Button
+        android:id="@+id/btSolicitudDescarga"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/TextoBotonDescargas"
+        android:textColor="@color/letraAzul1"
+        android:textSize="@dimen/tamanoletra"
+    />
+    <!-- android:background="@color/colorbtRegistrar" -->
+
+     <ListView 
+         android:id="@+id/lvListaDescargas"
+         android:layout_width="fill_parent"
+  		android:layout_height="fill_parent" 
+  		
+  	/>   
+	 
+	    
+    
+</LinearLayout>
