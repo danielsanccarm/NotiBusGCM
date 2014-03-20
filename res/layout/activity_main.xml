@@ -2,13 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/grisClaro"
+    >
 
     <TextView
         android:id="@+id/TextViewMensajes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10" 
+        android:textColor="@color/letraAzul3"
+        >
 
         
     </TextView>

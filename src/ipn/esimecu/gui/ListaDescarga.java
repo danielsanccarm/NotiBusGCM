@@ -19,11 +19,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ipn.esimecu.gcmpushnotif.Principal;
+
 import ipn.esimecu.gcmpushnotif.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,10 +43,13 @@ import android.widget.Toast;
 
 public class ListaDescarga extends Activity {
 	MyCustomAdapter dataAdapter =null;
+	int num_activity;			//Variable que indica que esta activity es la número 1, se utilizará para seleccionar las funciones en el POST
+	
 	
 	  public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_lista_descarga);
+	    num_activity=1;
 	    DesplegarListView();
 	    CheckButtonClick();
 	  }
@@ -244,25 +249,19 @@ public class ListaDescarga extends Activity {
 			    }
 			    
 			    Log.i(null, "lista JSON: "+listaDescarga.size());
-			    //Toast.makeText(getApplicationContext(), listaJSON.size(), Toast.LENGTH_SHORT).show();
-			    /*Toast.makeText(getApplicationContext(),
-			      responseText, Toast.LENGTH_LONG).show();*/
+ 		    
 			    
 			    try{
 			    	JSONArray datos = null;
 			    	Post post;
 			    	if(listaDescarga.size()!=0){
-			    	post = new Post(listaDescarga,"http://daniel.zoga.com.mx/gcm_server_php/lista_descarga.php",ListaDescarga.this);
-			    	
-			    	//JSONArray datos = post.getServerData(listaDescarga, "http://daniel.zoga.com.mx/gcm_server_php/lista_descarga.php");
-				     //Toast.makeText(getApplicationContext(), datos.toString(), Toast.LENGTH_SHORT).show();
+			    	post = new Post(listaDescarga,"http://daniel.zoga.com.mx/gcm_server_php/lista_descarga.php",ListaDescarga.this,num_activity);
+
 			    	post.execute(datos);
 			    	}else
-			    		Toast.makeText(getApplicationContext(), "Seleccione una estación", Toast.LENGTH_SHORT).show();
-			    	/*Intent i = new Intent(getApplicationContext(), Principal.class); //Principal
-			          startActivity(i);
-			          finish();*/
-			    	//}
+			    		Toast.makeText(getApplicationContext(), "Seleccione una Ruta", Toast.LENGTH_SHORT).show();
+			    	
+
 			    
 			    }catch(Exception ex){
 			    	Log.e(null, ex.toString());

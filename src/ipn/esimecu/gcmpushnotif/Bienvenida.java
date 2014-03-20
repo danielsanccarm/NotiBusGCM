@@ -16,7 +16,7 @@ public class Bienvenida extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        long duracion=2500;		//Tiempo que se mostrara la pantalla de bienvenida
+        long duracion=1100;		//Tiempo que se mostrara la pantalla de bienvenida
         
         setContentView(R.layout.bienvenida);	//Mostramos el contenido del layout bienvenida
         

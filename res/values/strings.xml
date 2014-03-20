@@ -9,7 +9,7 @@
     <string name="gcm_error">GCM: error (%1$s).</string>
     <string name="gcm_recoverable_error">GCM: error recuperable (%1$s).</string>
     <string name="gcm_deleted">GCM: Servidor elimino %1$d mensajes pendientes!</string>
-    <string name="server_registering">Intentando (intento %1$d/%2$d)para registrar en el Zoga Server.</string>
+    <string name="server_registering">Intentando (intento %1$d/%2$d)para registrar en el Servidor de Zoga.</string>
     <string name="server_registered">Zoga Server: Dispositivo agregado satisfactoriamente!</string>
     <string name="server_unregistered">Zoga Server: Dispositivo eliminado satisfactoriamente!</string>
     <string name="server_register_error">NO se pudo registrar el dispositivo despues de %1$d intentos.</string>

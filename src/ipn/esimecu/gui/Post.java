@@ -1,26 +1,24 @@
 package ipn.esimecu.gui;
 
 import ipn.esimecu.gcmpushnotif.Principal;
+import static ipn.esimecu.gcmpushnotif.RegisterActivity.regId;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +27,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
+
 
 public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	private Activity activity;
@@ -39,19 +40,20 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	private String respuesta = "";
 	private String URL;
 	private ArrayList parametros;
+	private int num_activityActivada;
 	
-	public Post(ArrayList<Integer> lista,String URL, Activity activity){
+	//Inicializamos todos los valores, que se proporcionan al crear el objeto POST
+	public Post(ArrayList<Integer> lista,String URL, Activity activity, int activo){
 		this.URL= URL;
 		this.parametros=lista;
 		this.activity=activity;
+		this.num_activityActivada=activo;//Permitirá identificar en que activity se encuentra
 		
 	}
 
 
 	private void conectaPost(ArrayList parametros, String URL) {
 	     List<NameValuePair> nameValuePairs;
-	     
-	     
 	     try {
 	    
             HttpClient httpclient = new DefaultHttpClient();
@@ -59,10 +61,17 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
             nameValuePairs = new ArrayList<NameValuePair>();
             //Log.i(null, parametros.toString());
             if (parametros != null) {
-                 	  nameValuePairs.add(new BasicNameValuePair("parada", GenerarString(parametros))); //parametros.toString()                                                                       }
+            		//Agregamos un parametro que se llamará parada, para ser enviado, y se compondra de una cadena separada por comas 
+                 	  nameValuePairs.add(new BasicNameValuePair("parada", GenerarString(parametros))); 
+                 	  
+                 	  if(num_activityActivada==2){			//En caso de ser la activity 2 (Principal) se agrega una variable extra
+                 		  nameValuePairs.add(new BasicNameValuePair("id_gcm",regId));
+                 	  
+                 	  }
                 	  httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             }
 	             HttpResponse response = httpclient.execute(httppost); //Ejecutamos y obtenemos la respuesta
+	             
 	             //entity = response.getEntity();
 	             //is = entity.getContent();
 	             is= response.getEntity().getContent();
@@ -104,13 +113,17 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	}
 
 	public JSONArray getServerData() { //ArrayList parametros, String URL
-	    conectaPost(parametros, URL);
+		Log.i("AntesdeObtenerDatos", parametros.toString()+""+URL);
+		conectaPost(parametros, URL);
+	    
         if (is != null) {
+        	Log.i("InputStream", "NO vacio");
             getRespuestaPost();
         }
         if (respuesta != null && respuesta.trim() != "") {
             return getJsonArray();
          } else {
+        	 Log.i("InputStream", "VACIO");
             return null;
          }
     }
@@ -150,43 +163,98 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	@Override
 	protected JSONArray doInBackground(JSONArray... params) {
 		// TODO Auto-generated method stub
+		
 		this.arreglo = params[0];
 		return getServerData();
 	}
 	
 	protected void onPostExecute(JSONArray arreglo){
-		this.arreglo=arreglo;
-		for(int i=0; i<this.arreglo.length(); i++){
-    		JSONObject objetomanipular;
-			try {
-				objetomanipular = this.arreglo.getJSONObject(i);
-				String temp=objetomanipular.getString("ID_Estacion");
-	    		Log.i("manipulando json", temp);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		
-    		
-    	}
-    	AlmacenarDescarga(this.arreglo.toString());
-		Intent i = new Intent(activity, Principal.class); //Principal
-        activity.startActivity(i);
-        
+		
+		Intent i = null;
+		//Seleccionamos las funciones a ejecutarse de la actividad que llamo la función
+		switch(num_activityActivada){
+			case 1:
+				this.arreglo=arreglo;
+				for(int a=0; a<this.arreglo.length(); a++){
+		    		JSONObject objetomanipular;
+					try {
+						objetomanipular = this.arreglo.getJSONObject(a);
+						String temp=objetomanipular.getString("ID_Estacion");
+			    		Log.i("manipulando json", temp);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    		
+		    		
+		    	}				
+				
+				Log.i("Comparando actividad", "Correcto");
+		    	AlmacenarDescarga(this.arreglo.toString(),"listaestaciones.txt");
+				 i= new Intent(activity, Principal.class); //Principal
+				 activity.startActivity(i);
+				 activity.finish();
+		        break;
+			case 2:
+				Toast.makeText(activity, "Se ha enviado satisfactoriamente su petición...", Toast.LENGTH_SHORT).show();
+				break;
+			default:
+				Log.i("Comparando actividad", "No se pudo");
+	}
+		
         //finish();
 		
 		
 	}
-	public void AlmacenarDescarga(String lista){
-		  try{
-			  OutputStreamWriter fout =new OutputStreamWriter(activity.openFileOutput("listaestaciones.txt",Context.MODE_PRIVATE));
-			  //for(int i=0;i<lista.length(); i++){
-				  fout.write(lista);
-			  //}
-			  fout.close();
-			  Log.i("Fichero", "Guardado correctamente");
-		  }catch(Exception ex){
-			  Log.e("Fichero", "Error al escribir el archivo");
-		  }
+	public void AlmacenarDescarga(String lista, String nombre_archivo){
+		boolean sdDisponible = false;
+		boolean sdAccesoEscritura = false;
+		//Almacenamos el estado de la tarjeta SD
+		String estado = Environment.getExternalStorageState();
+		
+		if(estado.equals(Environment.MEDIA_MOUNTED))
+		{
+			sdDisponible = true;
+			sdAccesoEscritura=true;
+			try
+			{
+			    File ruta_sd = Environment.getExternalStorageDirectory();
+			 
+			    File f = new File(ruta_sd.getAbsolutePath(), nombre_archivo);
+			 
+			    OutputStreamWriter fout = new OutputStreamWriter(new FileOutputStream(f));
+			 
+			    fout.write(lista);
+			    fout.flush();
+			    fout.close();
+			    Log.i("Almacenamiento", "Guardado correctamente en tarjeta SD");
+			}
+			catch (Exception ex)
+			{
+			    Log.e("Ficheros", "Error al escribir fichero a tarjeta SD");
+			}
+		}
+		else if (estado.equals(Environment.MEDIA_MOUNTED_READ_ONLY))
+		{
+		    sdDisponible = true;
+		    sdAccesoEscritura = false;
+		}
+		else
+		{
+		    sdDisponible = false;
+		    sdAccesoEscritura = false;
+		    try{
+				  OutputStreamWriter fout =new OutputStreamWriter(activity.openFileOutput(nombre_archivo,Context.MODE_PRIVATE));
+				  //for(int i=0;i<lista.length(); i++){
+					  fout.write(lista);
+				  //}
+				  fout.close();
+				  Log.i("Fichero", "Guardado correctamente en memoria interna");
+			  }catch(Exception ex){
+				  Log.e("Fichero", "Error al escribir el archivo");
+			  }
+		}
+		
+		  
 	  }
 }

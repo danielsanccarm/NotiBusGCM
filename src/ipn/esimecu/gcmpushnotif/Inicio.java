@@ -2,8 +2,9 @@ package ipn.esimecu.gcmpushnotif;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.EXTRA_MESSAGE;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.SENDER_ID;
-
 import ipn.esimecu.gcmpushnotif.R;
+import ipn.esimecu.almacenamiento.almacena;
+
 import com.google.android.gcm.GCMRegistrar;
 
 import android.os.AsyncTask;
@@ -13,6 +14,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +24,14 @@ public class Inicio extends Activity {
 	
 	// label para mostrar gcm mensajes
     TextView lblMensaje;
-     
+    
     // Asyntask
     AsyncTask<Void, Void, Void> mRegisterTask;
     
     public static String name;
     public static String email;
+    //Se almacenará el registrationID de gcm
+    
 	
 	//Alerta
 	AlertDialogManager alert = new AlertDialogManager();
@@ -68,18 +73,31 @@ public class Inicio extends Activity {
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 DISPLAY_MESSAGE_ACTION));
          
-        // Get GCM registration id
+        // Obtenemos el id de registro de GCM
         final String regId = GCMRegistrar.getRegistrationId(this);
- 
+        
         // Check if regid already presents
         if (regId.equals("")) {
-            // Registration is not present, register now with GCM          
+        	/*
+        	//Creamos un objeto de tipo SharedPreferences para almacenar el registrationID que nos da GCM. 
+        	//Se crea un fichero llamado datos que será ocupado unicamente por esta aplicación
+        	SharedPreferences preferencias = getSharedPreferences("datos",MODE_PRIVATE);
+        	//Creamos un objeto de tipo Editor para poder editar el contenido del objeto preferencias
+        	Editor editor = preferencias.edit();
+        	//Insertamos la cadena dentro del archivo datos
+        	editor.putString("datos", regId);
+        	//Finalizamos la edición
+        	editor.commit();
+        	*/
+        	
+            // Aún no esta registrado, registrar
             GCMRegistrar.register(this, SENDER_ID);
         } else {
-            // Device is already registered on GCM
+            // Dispositivo Registrado en GCM
             if (GCMRegistrar.isRegisteredOnServer(this)) {
-                // Skips registration.             
-                Toast.makeText(getApplicationContext(), "Ya esta registrado en GCM", Toast.LENGTH_LONG).show();
+                // Skips registration.          
+            	Log.v("GCM", "Registrado");
+                //Toast.makeText(getApplicationContext(), "Ya esta registrado en GCM", Toast.LENGTH_LONG).show();
             } else {
                 // Try to register again, but not in the UI thread.
                 // It's also necessary to cancel the thread onDestroy(),
@@ -91,7 +109,10 @@ public class Inicio extends Activity {
                     protected Void doInBackground(Void... params) {
                         // Register on our server
                         // On server creates a new user
+                    	almacena guardar = new almacena();
+                    	guardar.AlmacenarDescarga(regId, "registration_id.txt", Inicio.this);
                         ServerUtilities.register(context, name, email, regId);
+                        
                         Toast.makeText(getApplicationContext(), ServerUtilities.notificacion, Toast.LENGTH_SHORT).show();
                         return null;
                     }
@@ -99,6 +120,7 @@ public class Inicio extends Activity {
                     @Override
                     protected void onPostExecute(Void result) {
                         mRegisterTask = null;
+                        
                     }
  
                 };
@@ -125,7 +147,7 @@ public class Inicio extends Activity {
              
             // Showing received message
             lblMensaje.append(newMessage + "\n");          
-            Toast.makeText(getApplicationContext(), "NUevo Mensaje: " + newMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Nuevo Mensaje: " + newMessage, Toast.LENGTH_LONG).show();
              
             // Releasing wake lock
             WakeLocker.release();
@@ -145,6 +167,8 @@ public class Inicio extends Activity {
         }
         super.onDestroy();
     }
+    
+    
     
     /*
 	@Override

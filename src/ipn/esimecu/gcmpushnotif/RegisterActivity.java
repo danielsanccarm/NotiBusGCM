@@ -1,8 +1,9 @@
 package ipn.esimecu.gcmpushnotif;
 
-import static ipn.esimecu.gcmpushnotif.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.SENDER_ID;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.SERVER_URL;
+
+import java.io.File;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -10,8 +11,8 @@ import ipn.esimecu.gcmpushnotif.R;
 import ipn.esimecu.gui.ListaDescarga;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 public class RegisterActivity extends Activity{
 	// alert dialog manager
     AlertDialogManager alert = new AlertDialogManager();
-     
+    static public String regId;
     // Internet detector
     ConnectionDetector cd;
      
@@ -36,7 +37,7 @@ public class RegisterActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
         cd = new ConnectionDetector(getApplicationContext());
-        
+        String[] archivos = fileList();
       //Nos aseguramos de que tenga las dependencias correspondientes
         GCMRegistrar.checkDevice(this);
  
@@ -46,16 +47,25 @@ public class RegisterActivity extends Activity{
          
         // Get GCM registration id
         final String regId = GCMRegistrar.getRegistrationId(this);
-        
+        this.regId= regId;
      // Device is already registered on GCM
      if (!regId.equals("")){
-    	  Intent i = new Intent(getApplicationContext(), ListaDescarga.class); //Principal
-          startActivity(i);
-          finish();
+    	 
+    	 File f = new File(Environment.getExternalStorageDirectory(),"listaestaciones.txt");
+    	 if(VerificarExistencia(archivos,"listaestaciones.txt") || f.exists()){
+    		 Intent i = new Intent(getApplicationContext(),Principal.class);
+    		 startActivity(i);
+    		 finish();
+    	 }else{
+	    	 Intent i = new Intent(getApplicationContext(), ListaDescarga.class); //Principal
+	         startActivity(i);
+	         finish();
+    	 }
       }else
         if (GCMRegistrar.isRegisteredOnServer(this)) { //El correcto es sin el !
             // Skips registration.             
             Toast.makeText(getApplicationContext(), "Ya esta registrado en GCM", Toast.LENGTH_LONG).show();
+            
             Intent i = new Intent(getApplicationContext(), Principal.class);
             startActivity(i);
             finish();
@@ -116,6 +126,14 @@ public class RegisterActivity extends Activity{
 	            }
 	        });
 	    }
+    }
+    
+    private boolean VerificarExistencia(String[] archivos, String nombre){
+    	for(int i=0; i<archivos.length; i++){
+    		if(nombre.equals(archivos[i]))
+    			return true;
+    	}
+    	return false;
     }
 
 
