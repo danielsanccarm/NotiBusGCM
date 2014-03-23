@@ -29,6 +29,7 @@
     <string name="TituloDescargas">Seleccionar las rutas a descargar</string>
     <string name="TextoBotonDescargas">Descargar Seleccionados</string>
     <string name="Prueba">Prueba</string>
+    <string name="tituloMensajes">Mensajes</string>
     <!-- Parte Visual -->
     <dimen name="tamanoletra">20sp</dimen>
     <dimen name="tamanoletra2">13sp</dimen>

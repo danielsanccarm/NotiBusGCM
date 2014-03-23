@@ -17,6 +17,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -57,7 +58,38 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	     try {
 	    
             HttpClient httpclient = new DefaultHttpClient();
-	    	 HttpPost httppost = new HttpPost(URL);		//Hacemos la petición
+	    	HttpPost httppost = new HttpPost(URL);		//Hacemos la petición
+	    	 
+	    	JSONObject jsonObject = new JSONObject();		//Construirmos el JSONObject
+	    	String json="";
+	    	if(parametros != null){
+	    		jsonObject.put("parada", "["+GenerarString(parametros)+"]");
+	    		if(num_activityActivada==2)
+	    			jsonObject.put("id_gcm", regId);
+	    		
+	    		//Pasamos el json Object a string
+	    		json=jsonObject.toString();
+	    		Log.i("json to string", json);
+	    		StringEntity se = new StringEntity(json);
+	    		
+	    		httppost.setEntity(se);
+	    		// Encabezados para que el servidor detecte el post 
+	            httppost.setHeader("Accept", "application/json");
+	            httppost.setHeader("Content-type", "application/json");
+	    	}
+	    	 
+	    	HttpResponse response = httpclient.execute(httppost); //Ejecutamos y obtenemos la respuesta 
+            
+            //entity = response.getEntity();
+            //is = entity.getContent();
+            is= response.getEntity().getContent();
+	    	 
+	    	 
+	    	 
+	    	 
+	    	 
+	    	 
+	    	/* 
             nameValuePairs = new ArrayList<NameValuePair>();
             //Log.i(null, parametros.toString());
             if (parametros != null) {
@@ -75,6 +107,9 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 	             //entity = response.getEntity();
 	             //is = entity.getContent();
 	             is= response.getEntity().getContent();
+	             
+	       */      
+	             
 	       } catch (Exception e) {
 	            Log.e("log_tag", "Error in http connection " + e.toString());
             } finally {
@@ -86,6 +121,7 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 		try {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is)); //, "iso-8859-1"), 8
 		StringBuilder sb = new StringBuilder();
+		Log.v("Respuesta Post", "Comienza aqui");
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 		        sb.append(line + "\n");
@@ -196,7 +232,12 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 				 activity.finish();
 		        break;
 			case 2:
-				Toast.makeText(activity, "Se ha enviado satisfactoriamente su petición...", Toast.LENGTH_SHORT).show();
+				if(respuesta.indexOf("false")!=-1)
+					Toast.makeText(activity, "Se ha enviado satisfactoriamente su petición...", Toast.LENGTH_SHORT).show();
+				else{
+					Toast.makeText(activity, "No se pudo entregar su petición, intentelo de nuevo", Toast.LENGTH_SHORT).show();
+					
+				}
 				break;
 			default:
 				Log.i("Comparando actividad", "No se pudo");
