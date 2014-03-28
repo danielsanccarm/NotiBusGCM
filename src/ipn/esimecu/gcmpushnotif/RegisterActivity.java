@@ -106,9 +106,10 @@ public class RegisterActivity extends Activity{
 	                // Read EditText dat
 	                String name = txtName.getText().toString();
 	                String email = txtEmail.getText().toString();
-	                 
+	                
 	                // Check if user filled the form
 	                if(name.trim().length() > 0 && email.trim().length() > 0){
+	                	Toast.makeText(getApplicationContext(), "Envio de solicitud de registro", Toast.LENGTH_SHORT).show();
 	                    // Launch Main Activity
 	                    Intent i = new Intent(getApplicationContext(), Inicio.class);
 	                     

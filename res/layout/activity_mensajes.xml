@@ -8,23 +8,32 @@
 
     <TextView
         android:id="@+id/tvTituloMensajes"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@string/tituloMensajes"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:textColor="@color/letraAzul1"
-        />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/letraAzul1" />
 
+    <ScrollView android:id="@+id/textAreaScroller" 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent" 
+	    android:layout_x="0px" 
+	    android:layout_y="25px" 
+	    android:scrollbars="vertical">
+    
     <TextView
         android:id="@+id/TextViewMensajes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10" 
         android:textColor="@color/letraAzul3"
-        >
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
 
         
-    </TextView>
+    
+    </ScrollView>
+
 
 </LinearLayout>

@@ -5,6 +5,13 @@
     android:gravity="bottom|center"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_weight="0.59"
+        android:src="@drawable/rojo_512" />
+
     <TextView
         android:id="@+id/tvBienvenida"
         android:layout_width="wrap_content"
@@ -16,7 +23,6 @@
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
-        
         android:layout_height="wrap_content" />
 
 </LinearLayout>

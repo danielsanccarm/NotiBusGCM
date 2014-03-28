@@ -174,7 +174,7 @@ public class Principal extends SherlockFragmentActivity implements OnPageChangeL
 
 	    @Override
 	    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-	    	if(conteoTabs<=tab.getPosition())
+	    	
 	        mPager.setCurrentItem(tab.getPosition());
 	    }
 

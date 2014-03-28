@@ -232,9 +232,10 @@ public class Post extends AsyncTask<JSONArray,Void,JSONArray>{
 				 activity.finish();
 		        break;
 			case 2:
-				if(respuesta.indexOf("false")!=-1)
+				//Toast.makeText(activity,""+ respuesta.indexOf("false"),Toast.LENGTH_SHORT).show();
+				if(respuesta.indexOf("false")==-1){
 					Toast.makeText(activity, "Se ha enviado satisfactoriamente su petición...", Toast.LENGTH_SHORT).show();
-				else{
+				}else{
 					Toast.makeText(activity, "No se pudo entregar su petición, intentelo de nuevo", Toast.LENGTH_SHORT).show();
 					
 				}

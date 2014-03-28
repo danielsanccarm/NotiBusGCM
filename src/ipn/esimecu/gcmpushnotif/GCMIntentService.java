@@ -2,14 +2,23 @@ package ipn.esimecu.gcmpushnotif;
 
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.SENDER_ID;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.displayMessage;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
-
 import ipn.esimecu.gcmpushnotif.R;
+
 import com.google.android.gcm.GCMBaseIntentService;
 
 
@@ -49,6 +58,17 @@ public class GCMIntentService extends GCMBaseIntentService{
     protected void onMessage(Context context, Intent intent) {
         Log.i(TAG, "Mensaje Recibido");
         String message = intent.getExtras().getString("price");
+      
+        //Comprobamos el estado de la memoria externa (tarjeta SD)
+        String estado = Environment.getExternalStorageState();
+        
+        //Escribimos el mensaje en la sd
+        if (estado.equals(Environment.MEDIA_MOUNTED))
+        {
+        	escribe(message);
+        	Log.i("Escritura", "Correcto");
+        }
+               
          
         displayMessage(context, message);
         // notifies user
@@ -64,6 +84,9 @@ public class GCMIntentService extends GCMBaseIntentService{
         Log.i(TAG, "Received deleted messages notification");
         String message = getString(R.string.gcm_deleted, total);
         displayMessage(context, message);
+        
+        
+        
         // notifies user
         generateNotification(context, message);
     }
@@ -90,7 +113,7 @@ public class GCMIntentService extends GCMBaseIntentService{
      * Issues a notification to inform the user that server has sent a message.
      */
     private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.ic_launcher;
+        int icon = R.drawable.logo_rojo;
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -115,4 +138,26 @@ public class GCMIntentService extends GCMBaseIntentService{
         notificationManager.notify(0, notification);     
  
     }
+    
+    private void escribe(String mensaje){
+    	
+		try
+		{
+			File ruta_sd = Environment.getExternalStorageDirectory();
+			File f = new File(ruta_sd.getAbsolutePath(), "MensajesNotiBus.txt");
+
+			OutputStreamWriter fout =
+				new OutputStreamWriter(
+					new FileOutputStream(f,true));		//El true es para activar el append, para 
+														//ingresarle al final del archivo
+			fout.write(mensaje+"\r\n");
+			fout.flush();
+			fout.close();
+		}
+		catch (Exception ex)
+		{
+			Log.e("Ficheros", "Error al escribir fichero a tarjeta SD");
+		}
+    }
+    
 }

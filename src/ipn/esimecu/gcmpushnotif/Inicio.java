@@ -2,13 +2,23 @@ package ipn.esimecu.gcmpushnotif;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.EXTRA_MESSAGE;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.SENDER_ID;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.OutputStreamWriter;
+
 import ipn.esimecu.gcmpushnotif.R;
+import ipn.esimecu.gui.ListaDescarga;
 import ipn.esimecu.almacenamiento.almacena;
 
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gcm.GCMRegistrar;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,6 +27,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,7 +80,13 @@ public class Inicio extends Activity {
         GCMRegistrar.checkManifest(this);
  
         lblMensaje = (TextView) findViewById(R.id.TextViewMensajes);
-         
+        String estado = Environment.getExternalStorageState();
+        if (estado.equals(Environment.MEDIA_MOUNTED))
+        {
+        	Lectura();
+        	Log.i("Lectura", "Correcto");
+        }
+        lblMensaje.setText("");
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 DISPLAY_MESSAGE_ACTION));
          
@@ -78,17 +95,6 @@ public class Inicio extends Activity {
         
         // Check if regid already presents
         if (regId.equals("")) {
-        	/*
-        	//Creamos un objeto de tipo SharedPreferences para almacenar el registrationID que nos da GCM. 
-        	//Se crea un fichero llamado datos que será ocupado unicamente por esta aplicación
-        	SharedPreferences preferencias = getSharedPreferences("datos",MODE_PRIVATE);
-        	//Creamos un objeto de tipo Editor para poder editar el contenido del objeto preferencias
-        	Editor editor = preferencias.edit();
-        	//Insertamos la cadena dentro del archivo datos
-        	editor.putString("datos", regId);
-        	//Finalizamos la edición
-        	editor.commit();
-        	*/
         	
             // Aún no esta registrado, registrar
             GCMRegistrar.register(this, SENDER_ID);
@@ -112,14 +118,28 @@ public class Inicio extends Activity {
                     	almacena guardar = new almacena();
                     	guardar.AlmacenarDescarga(regId, "registration_id.txt", Inicio.this);
                         ServerUtilities.register(context, name, email, regId);
-                        
                         Toast.makeText(getApplicationContext(), ServerUtilities.notificacion, Toast.LENGTH_SHORT).show();
+                        //if(newMessage.equals("Zoga Server: Dispositivo agregado satisfactoriamente")){
+                       	 String[] archivos = fileList();
+                            File f = new File(Environment.getExternalStorageDirectory(),"listaestaciones.txt");
+                           	 if(VerificarExistencia(archivos,"listaestaciones.txt") || f.exists()){
+                           		 Intent i = new Intent(getApplicationContext(),Principal.class);
+                           		 startActivity(i);
+                           		 finish();
+                           	 }else{
+                       	    	 Intent i = new Intent(getApplicationContext(), ListaDescarga.class); //Principal
+                       	         startActivity(i);
+                       	         finish();
+                           	 }
+                        //}
+                        //Toast.makeText(getApplicationContext(), ServerUtilities.notificacion, Toast.LENGTH_SHORT).show();
                         return null;
                     }
  
                     @Override
                     protected void onPostExecute(Void result) {
                         mRegisterTask = null;
+                        
                         
                     }
  
@@ -146,9 +166,19 @@ public class Inicio extends Activity {
              * */
              
             // Showing received message
-            lblMensaje.append(newMessage + "\n");          
-            Toast.makeText(getApplicationContext(), "Nuevo Mensaje: " + newMessage, Toast.LENGTH_LONG).show();
-             
+            lblMensaje.append(newMessage + "\n");      
+            //Comprobamos el estado de la memoria externa (tarjeta SD)
+            /*
+            String estado = Environment.getExternalStorageState();
+            if (estado.equals(Environment.MEDIA_MOUNTED))
+            {
+            	Lectura();
+            	Log.i("Lectura", "Correcto");
+            }
+            */
+            //Toast.makeText(getApplicationContext(), "Nuevo Mensaje: " + newMessage, Toast.LENGTH_LONG).show();
+            //if(newMessage.equals("null"))
+            	//Toast.makeText(getApplicationContext(), "si lo detecto", Toast.LENGTH_SHORT).show();
             // Releasing wake lock
             WakeLocker.release();
         }
@@ -168,14 +198,90 @@ public class Inicio extends Activity {
         super.onDestroy();
     }
     
+    private void Lectura(){
+	    	try
+			{
+				File ruta_sd = Environment.getExternalStorageDirectory();
+				File f = new File(ruta_sd.getAbsolutePath(), "MensajesNotiBus.txt");
+				if(f.exists()){
+					lblMensaje.setText("");
+					FileReader fred =
+						new FileReader(f);		//El true es para activar el append, para 
+																//ingresarle al final del archivo
+					BufferedReader br = new BufferedReader(fred);
+					String linea;
+	                
+	                while ((linea =br.readLine()) != null) {
+	                	
+	                    lblMensaje.append(linea+"\n");
+	                    
+	                }
+	                br.close();
+	                fred.close();
+				}else{
+					lblMensaje.setText(R.string.sinMensajes);
+				}
+					
+			}
+			catch (Exception ex)
+			{
+				Log.e("Ficheros", "Error al leer el fichero a tarjeta SD");
+			}
+    }
     
     
-    /*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.inicio, menu);
 		return true;
 	}
-	 */
+	
+	@Override
+	public boolean onOptionsItemSelected(android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+		//Toast.makeText(getApplicationContext(), "Item select"+item.getItemId(), Toast.LENGTH_SHORT).show();
+		//if(item.getItemId()==1){
+			vaciarMensajes();
+	        Toast.makeText(getApplicationContext(), "Se limpiaron los mensajes", Toast.LENGTH_SHORT).show();
+	        lblMensaje.setText("");
+		//}
+		return super.onOptionsItemSelected(item);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Toast.makeText(getApplicationContext(), "Item select"+item.getItemId(), Toast.LENGTH_SHORT).show();
+		if(item.getItemId()==1){
+			vaciarMensajes();
+	        Toast.makeText(getApplicationContext(), "Se limpiaron los mensajes", Toast.LENGTH_SHORT).show();
+	        lblMensaje.setText("");
+		}
+        return true; /** true -> consumimos el item, no se propaga*/
+	}
+	
+	private void vaciarMensajes(){
+		String estado = Environment.getExternalStorageState();
+        if (estado.equals(Environment.MEDIA_MOUNTED))
+        {
+        	try
+			{
+				File ruta_sd = Environment.getExternalStorageDirectory();
+				File f = new File(ruta_sd.getAbsolutePath(), "MensajesNotiBus.txt");
+				f.delete();
+			}
+			catch (Exception ex)
+			{
+				Log.e("Ficheros", "Error al eliminar el archivo");
+			}
+        }
+	}
+	private boolean VerificarExistencia(String[] archivos, String nombre){
+    	for(int i=0; i<archivos.length; i++){
+    		if(nombre.equals(archivos[i]))
+    			return true;
+    	}
+    	return false;
+    }
+	 
 }

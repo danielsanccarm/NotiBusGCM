@@ -235,6 +235,8 @@ public class ListaDescarga extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
+				Toast.makeText(getApplicationContext(), "Se enviará su petición", Toast.LENGTH_LONG).show();
 				StringBuffer responseText = new StringBuffer();
 			    
 			 

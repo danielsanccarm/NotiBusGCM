@@ -30,6 +30,8 @@
     <string name="TextoBotonDescargas">Descargar Seleccionados</string>
     <string name="Prueba">Prueba</string>
     <string name="tituloMensajes">Mensajes</string>
+    <string name="limpiarMensajes">Limpiar Mensajes</string>
+    <string name="sinMensajes">Sin mensajes</string>
     <!-- Parte Visual -->
     <dimen name="tamanoletra">20sp</dimen>
     <dimen name="tamanoletra2">13sp</dimen>

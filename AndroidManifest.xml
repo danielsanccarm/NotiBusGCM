@@ -32,10 +32,10 @@
     <!-- Actividad Principal Main -->
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo_rojo"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock"
-        >
+        > <!-- android:label="@string/app_name" -->
 
         <!-- Actividad Inicio -->
         <!-- "ipn.esimecu.gcmpushnotif.RegisterActivity" -->
@@ -51,13 +51,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Actividad Principal -->
-
-        <activity
-            android:name="ipn.esimecu.gcmpushnotif.Inicio"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name" >
-        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -72,12 +65,18 @@
 
         <service android:name="ipn.esimecu.gcmpushnotif.GCMIntentService" />
 
+        
+        <activity
+            android:name="ipn.esimecu.gcmpushnotif.Inicio"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <!-- Actividad Principal -->
          <activity
             
             android:name="ipn.esimecu.gcmpushnotif.Principal"
-            android:label="@string/app_name"
-            
-            > <!-- android:theme="@style/ListColor" -->
+            > <!-- android:theme="@style/ListColor" --><!-- android:label="@string/app_name" -->
         </activity> 
         <activity
             android:name="ipn.esimecu.gcmpushnotif.RegisterActivity"

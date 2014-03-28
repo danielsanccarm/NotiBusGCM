@@ -5,6 +5,8 @@ import static ipn.esimecu.gcmpushnotif.CommonUtilities.TAG;
 import static ipn.esimecu.gcmpushnotif.CommonUtilities.displayMessage;
 //import static org.example.MainLocalizacion.CommonUtilities.SERVER_URL;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -19,12 +21,15 @@ import java.util.Random;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 import ipn.esimecu.gcmpushnotif.R;
+import ipn.esimecu.gui.ListaDescarga;
 
 import com.google.android.gcm.GCMRegistrar;
-
+import android.app.Activity;
 
 public class ServerUtilities {
 	private static final int MAX_ATTEMPTS = 5;
@@ -60,6 +65,7 @@ public class ServerUtilities {
                 GCMRegistrar.setRegisteredOnServer(context, true);
                 String message = context.getString(R.string.server_registered);
                 CommonUtilities.displayMessage(context, message);
+                
                 return;
             } catch (IOException e) {
                 // Here we are simplifying and retrying on any error; in a real
