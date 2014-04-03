@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="5dp"
     tools:context=".Principal"
+    android:background="@drawable/degradado3"
      >
      <!-- android:background="@color/grisClaro" -->
 

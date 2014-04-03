@@ -80,13 +80,9 @@ public class Inicio extends Activity {
         GCMRegistrar.checkManifest(this);
  
         lblMensaje = (TextView) findViewById(R.id.TextViewMensajes);
-        String estado = Environment.getExternalStorageState();
-        if (estado.equals(Environment.MEDIA_MOUNTED))
-        {
-        	Lectura();
-        	Log.i("Lectura", "Correcto");
-        }
-        lblMensaje.setText("");
+        //lblMensaje.setText("");
+        
+        
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 DISPLAY_MESSAGE_ACTION));
          
@@ -103,6 +99,12 @@ public class Inicio extends Activity {
             if (GCMRegistrar.isRegisteredOnServer(this)) {
                 // Skips registration.          
             	Log.v("GCM", "Registrado");
+            	String estado = Environment.getExternalStorageState();
+                if (estado.equals(Environment.MEDIA_MOUNTED))
+                {
+                	Lectura();
+                	Log.i("Lectura", "Correcto");
+                }
                 //Toast.makeText(getApplicationContext(), "Ya esta registrado en GCM", Toast.LENGTH_LONG).show();
             } else {
                 // Try to register again, but not in the UI thread.
@@ -168,6 +170,7 @@ public class Inicio extends Activity {
             // Showing received message
             lblMensaje.append(newMessage + "\n");      
             //Comprobamos el estado de la memoria externa (tarjeta SD)
+            
             /*
             String estado = Environment.getExternalStorageState();
             if (estado.equals(Environment.MEDIA_MOUNTED))
@@ -177,10 +180,23 @@ public class Inicio extends Activity {
             }
             */
             //Toast.makeText(getApplicationContext(), "Nuevo Mensaje: " + newMessage, Toast.LENGTH_LONG).show();
-            //if(newMessage.equals("null"))
+            //if(newMessage!= null)
             	//Toast.makeText(getApplicationContext(), "si lo detecto", Toast.LENGTH_SHORT).show();
             // Releasing wake lock
             WakeLocker.release();
+            if(newMessage.equals("Zoga Server: Dispositivo agregado satisfactoriamente!")){
+	            String[] archivos = fileList();
+	            File f = new File(Environment.getExternalStorageDirectory(),"listaestaciones.txt");
+	           	 if(VerificarExistencia(archivos,"listaestaciones.txt") || f.exists()){
+	           		 Intent i = new Intent(getApplicationContext(),Principal.class);
+	           		 startActivity(i);
+	           		 finish();
+	           	 }else{
+	       	    	 Intent i = new Intent(getApplicationContext(), ListaDescarga.class); //Principal
+	       	         startActivity(i);
+	       	         finish();
+	           	 }
+            }
         }
     };
      
@@ -204,7 +220,7 @@ public class Inicio extends Activity {
 				File ruta_sd = Environment.getExternalStorageDirectory();
 				File f = new File(ruta_sd.getAbsolutePath(), "MensajesNotiBus.txt");
 				if(f.exists()){
-					lblMensaje.setText("");
+					//lblMensaje.setText("");
 					FileReader fred =
 						new FileReader(f);		//El true es para activar el append, para 
 																//ingresarle al final del archivo
@@ -219,6 +235,7 @@ public class Inicio extends Activity {
 	                br.close();
 	                fred.close();
 				}else{
+					lblMensaje.setText("");
 					lblMensaje.setText(R.string.sinMensajes);
 				}
 					

@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom|center"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/degradado"
+    >
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="192dp"
         android:layout_height="192dp"
-        android:layout_weight="0.59"
+        android:layout_weight="0.5"
         android:src="@drawable/rojo_512" />
 
     <TextView
@@ -17,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Bienvenida"
+        android:textColor="@color/letraAzul1"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ProgressBar

@@ -32,6 +32,8 @@
     <string name="tituloMensajes">Mensajes</string>
     <string name="limpiarMensajes">Limpiar Mensajes</string>
     <string name="sinMensajes">Sin mensajes</string>
+    <string name="titAyuda">Acerca de NotiBus</string>
+    <string name="AcercaDe">Acerca de</string>
     <!-- Parte Visual -->
     <dimen name="tamanoletra">20sp</dimen>
     <dimen name="tamanoletra2">13sp</dimen>
@@ -45,5 +47,22 @@
 
     <string name="title_activity_principal">PrincipalActivity</string>
     <string name="title_activity_lista_descarga">ListaDescarga</string>
+    <string name="title_activity_ayuda">Ayuda</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="Info">NotiBus es un prototipo de sistema que te permitirá enterarte en que 
+        estación se encuentra un autobús de la RTP del Distrito Federal.\n\
+        Los pasos a seguir son:\n
+        1. Registrarte\n
+        2. Seleccionar tu ruta(por el momento sólo se cuenta con la 39-A).\n
+        3. Seleccionar la estación en la que quieras que se te informe de la presencia de un autobús perteneciente a la ruta que seleccionaste.\n
+        4. Recibir tu notificación.\n\
+        Y listo!\n\
+        Desarrollado por Ingenieros en Computación:\n
+        -> Daniel Sánchez\n
+        -> William Luis Calderon\n\
+        Egresados de la ESIME Culhuacan del IPN.
+        </string>
+    <string name="comenzar">Comenzar</string>
 
 </resources>

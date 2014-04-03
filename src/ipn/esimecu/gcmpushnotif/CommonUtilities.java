@@ -16,7 +16,7 @@ public class CommonUtilities {
     static final String TAG = "Prueba GCM";
  
     static final String DISPLAY_MESSAGE_ACTION =
-            "com.danwill.gcmp2.DISPLAY_MESSAGE";
+            "ipn.esimecu.gcmpusshnotif.DISPLAY_MESSAGE";
  
     static final String EXTRA_MESSAGE = "message";
  

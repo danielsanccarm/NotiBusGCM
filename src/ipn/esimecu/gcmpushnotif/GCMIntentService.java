@@ -62,18 +62,24 @@ public class GCMIntentService extends GCMBaseIntentService{
         //Comprobamos el estado de la memoria externa (tarjeta SD)
         String estado = Environment.getExternalStorageState();
         
+        //Evitamos que se escriban mensajes vacios
+        //if(!message.equals("") && !message.equals(null))
         //Escribimos el mensaje en la sd
-        if (estado.equals(Environment.MEDIA_MOUNTED))
-        {
-        	escribe(message);
-        	Log.i("Escritura", "Correcto");
+        if(message!= null){
+    		
+        
+	        if (estado.equals(Environment.MEDIA_MOUNTED))
+	        {
+	        	escribe(message);
+	        	Log.i("Escritura", "Correcto");
+	        }
+	               
+	         
+	        displayMessage(context, message);
+	        // notifies user
+	        generateNotification(context, message);
+	        //Aqui se recibe el mensajeee
         }
-               
-         
-        displayMessage(context, message);
-        // notifies user
-        generateNotification(context, message);
-        //Aqui se recibe el mensajeee
     }
  
     /**

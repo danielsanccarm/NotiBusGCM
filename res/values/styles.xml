@@ -12,13 +12,14 @@
             backward-compatibility can go here.
         -->
     </style>
-    
+
     <style name="Theme_listViewStyle" parent="android:Theme.Holo">
-     	<item name="android:textColor">#000033</item>
- 	</style>
+        <item name="android:textColor">#000033</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
+
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">#000033</item>
     </style>
@@ -28,15 +29,32 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">16dp</item>
     </style>
-    
+
     <style name="ListColor" parent="@android:style/Widget.ListView">
         <item name="android:textColor">#000033</item>
     </style>
-    
-     <!-- 
+
+    <!--
      <style name="ListColor2" parent="Widget.Sherlock.ListView.DropDown">
         <item name="android:textColor">#000033</item>
     </style>
-     -->
+    -->
+
+    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="buttonBarStyle">@style/ButtonBar</item>
+        <item name="buttonBarButtonStyle">@style/ButtonBarButton</item>
+    </style>
+
+    <style name="ButtonBar">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+
+    <style name="ButtonBarButton" />
 
 </resources>

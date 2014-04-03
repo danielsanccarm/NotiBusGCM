@@ -138,6 +138,11 @@ public class Principal extends SherlockFragmentActivity implements OnPageChangeL
 	            	  i = new Intent(getApplicationContext(), ListaDescarga.class);
 	            	  startActivity(i);
 	            	  break;
+	              case R.id.AcercadeAyuda:
+	            	  i = new Intent(getApplicationContext(), Ayuda.class);
+	            	  startActivity(i);
+	            	  finish();
+	            	  break;
 	              }
 	              
 	              return true; /** true -> consumimos el item, no se propaga*/

@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -76,8 +77,8 @@ public class RegisterActivity extends Activity{
 	        if (!cd.isConnectingToInternet()) {
 	            // Internet Connection is not present
 	            alert.showAlertDialog(RegisterActivity.this,
-	                    "Internet Connection Error",
-	                    "Please connect to working Internet connection", false);
+	                    "Error de Conexión a Internet",
+	                    "Conectese a Internet para poder trabajar", false);
 	            // stop executing code by return
 	            return;
 	        }
@@ -122,7 +123,7 @@ public class RegisterActivity extends Activity{
 	                }else{
 	                    // user doen't filled that data
 	                    // ask him to fill the form
-	                    alert.showAlertDialog(RegisterActivity.this, "Registration Error!", "Please enter your details", false);
+	                    alert.showAlertDialog(RegisterActivity.this, "Error de Registro!", "Please enter your details", false);
 	                }
 	            }
 	        });
@@ -136,6 +137,23 @@ public class RegisterActivity extends Activity{
     	}
     	return false;
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.m_registro, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+		 Intent mainIntent = new Intent().setClass(getApplicationContext(), Ayuda.class);
+    	 startActivity(mainIntent);
+    	 finish();
+		return super.onOptionsItemSelected(item);
+	}
 
 
 }
